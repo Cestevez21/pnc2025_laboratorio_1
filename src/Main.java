@@ -10,6 +10,7 @@ import Classes.GestorDisco;
 public class Main {
 
     static GestorArtista TodosArtistas = new GestorArtista();
+    static GestorDisco TodosDiscos = new GestorDisco();
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -38,7 +39,7 @@ public class Main {
                 "\n1.)Ingresar Artista." +
                         "\n2.)Ingresar Disco." +
                         "\n3.)Comprar Disco." +
-                        "\n4.)Ver \"Artista\" con \"Disco\" mas vendido." +
+                        "\n4.)Ver \"Artista\" con mas discos vendidos." +
                         "\n5.)Ver Disco con mas de X cantidades vendidas." +
                         "\n6.)Ver todos los Artistas." +
                         "\n7.)Ver todos los discos." +
@@ -60,6 +61,19 @@ public class Main {
 
     }
 
+    public static void mostrarTodosDiscos(){
+        List<Disco> discos = TodosDiscos.getDiscos();
+
+        if(discos.isEmpty()){
+            System.out.println("No hay discos.");
+        } else {
+            System.out.println("\nTodos los discos:");
+
+            for (int i = 0; i < discos.size(); i++){
+                System.out.println((i+1)+".)"+discos.get(i).getTitulo()+"["+discos.get(i).getArtista().getNombre()+"]");
+            }
+        }
+    }
 
     public static void ingresarArtista(){
         System.out.print("\nIngrese el nombre del artista: ");
@@ -73,6 +87,52 @@ public class Main {
         System.out.println("\nEl artista se ha ingresado correctamente.");
     }
 
+    public static void ingresarDisco(){
+        System.out.println("\nLista de Artistas: ");
+
+        for (Artista artista : TodosArtistas.getArtistas()){
+            System.out.println(artista.getId()+".) "+artista.getNombre());
+        }
+
+        System.out.print("Seleccione el ID del artista: ");
+
+        int idArtista = sc.nextInt();
+        sc.nextLine();
+
+        Artista artista = TodosArtistas.getArtista(idArtista - 1);
+
+        System.out.print("\nIngrese el nombre del disco: ");
+        String nombreDisco = sc.nextLine();
+
+        Disco disco = new Disco(artista, nombreDisco);
+        artista.registrarDisco(disco);
+        TodosDiscos.setDiscos(disco);
+
+        System.out.println("El disco se ha registrado correctamente.");
+    }
+
+    public static void comprarDisco(){
+        List<Disco> discos = TodosDiscos.getDiscos();
+        System.out.println("\nLista de Discos: ");
+
+        for (int i = 0; i < discos.size(); i++){
+            System.out.println((i + 1) + ".)" + discos.get(i).getTitulo());
+        }
+
+        System.out.print("\nSelecciona el ID del disco que deseas comprar: ");
+        int idDisco = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Disco seleccionado: " + discos.get(idDisco - 1).getTitulo().toUpperCase() +"\nCuantas copias deseas comprar?");
+        int copias = sc.nextInt();
+        sc.nextLine();
+
+        Disco disco = discos.get(idDisco - 1);
+        disco.registrarVentaDisco(copias);
+
+        System.out.println("La compra se ha realizado con exito.");
+    }
+
     public static void artistaConDiscoMasVendido(){
         Artista mejorArtista = TodosArtistas.getArtistaConMasVentas();
 
@@ -81,6 +141,20 @@ public class Main {
             System.out.println(mejorArtista.mostrarArtista());
         } else {
             System.out.println("No hay artistas registrados");
+        }
+    }
+
+    public static void verDiscoConXVenas(){
+        System.out.print("\nIngresa el minimo de ventas: ");
+        int ventas = sc.nextInt();
+        sc.nextLine();
+
+        List<Disco> discosFiltrados = TodosDiscos.getDiscosConXVentas(ventas);
+
+        if (discosFiltrados.isEmpty()){
+            System.out.println("No hay discos con mas de "+ventas+" ventas.");
+        } else {
+            discosFiltrados.forEach(Disco::InfoDisco);
         }
     }
 

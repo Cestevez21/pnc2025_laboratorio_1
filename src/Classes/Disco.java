@@ -1,17 +1,17 @@
 package Classes;
 
 public class Disco {
-    private int artista;
+    private Artista artista;
     private String titulo;
     private int ventasTotales;
 
-    public Disco(int artista, String titulo, int ventasTotales) {
+    public Disco(Artista artista, String titulo) {
         this.artista = artista;
         this.titulo = titulo;
-        this.ventasTotales = ventasTotales;
+        this.ventasTotales = 0;
     }
 
-    public void setArtista(int artista){
+    public void setArtista(Artista artista){
         this.artista = artista;
     }
 
@@ -23,7 +23,7 @@ public class Disco {
         this.ventasTotales = ventasTotales;
     }
 
-    public int getArtista(){
+    public Artista getArtista(){
         return artista;
     }
 
@@ -37,13 +37,17 @@ public class Disco {
 
     public void registrarVentaDisco(int cantidadDiscos){
         this.ventasTotales += cantidadDiscos;
+
+        Artista artista = this.artista;
+        artista.getVentastotales();
+        artista.calcularDiscoMasVendido();
     }
 
     public void InfoDisco(){
-         System.out.println(
-                 "Titulo: " + this.titulo +
-                 "\nArtista: " + this.artista +
-                 "\nVentas: " + this.ventasTotales
-         );
+        System.out.println(
+                "\nTitulo: " + this.titulo +
+                        "\nArtista: " + this.artista.getNombre() +
+                        "\nVentas: " + this.ventasTotales
+        );
     }
 }
